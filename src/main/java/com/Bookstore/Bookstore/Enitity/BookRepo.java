@@ -1,4 +1,4 @@
-package Enitity;
+package com.Bookstore.Bookstore.Enitity;
 
 import org.springframework.data.repository.CrudRepository;
 

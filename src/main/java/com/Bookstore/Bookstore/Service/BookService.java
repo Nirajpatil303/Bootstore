@@ -1,7 +1,7 @@
-package Service;
+package com.Bookstore.Bookstore.Service;
 
-import Enitity.Book;
-import Enitity.BookRepo;
+import com.Bookstore.Bookstore.Enitity.Book;
+import com.Bookstore.Bookstore.Enitity.BookRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,29 +13,46 @@ public class BookService {
     @Autowired
     private BookRepo bookRepo;
 
-    // 1. Get book by Id
-    public Book getBookById(Long id) {
-        return (Book) bookRepo.findById(id).orElse(null);
-    }
+   //All Get Methods
+   {
+       public Book getBookById (Long id){
+       return (Book) bookRepo.findById(id).orElse(null);
+   }
 
-    // 2. Get All Books
-    public List<Book> getAllBooks() {
-        return (List<Book>) bookRepo.findAll();
-    }
 
-    // 3. Get Number of books available by id
-    public int getNumberOfBooksAvailableById(Long id) {
-        Book book = (Book) bookRepo.findById(id).orElse(null);
-        return (book != null) ? book.getTotalCount() : 0;
-    }
+       public List<Book> getAllBooks () {
+       return (List<Book>) bookRepo.findAll();
+   }
 
-    // 4. Update a book
+
+       public int getNumberOfBooksAvailableById (Long id){
+       if (bookRepo.existsById(id)) {
+           Book book = (Book) bookRepo.findById(id).orElse(null);
+           return (book != null) ? book.getTotalCount() : 0;
+       } else {
+           throw new RuntimeException("Book not found by given id: " + id);
+       }
+   }
+   }
+    //Put Method
     public Book updateBook(Book book) {
         if (bookRepo.existsById(book.getId())) {
             return (Book) bookRepo.save(book);
         } else {
             throw new RuntimeException("Book not found");
         }
+    }
+    //Post method
+    public Book addabook(Book book) {
+        if (bookRepo.existsById(book.getId())) {
+            throw new RuntimeException("Book already exist by this id");
+        } else {
+            return bookRepo.save(book);
+        }
+    }
+    //delete method
+    public void deletebook(Long id) {
+        bookRepo.deleteById(id);
     }
 
     // 5. Sell a Book
