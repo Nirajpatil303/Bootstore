@@ -14,7 +14,7 @@ public class BookService {
     private BookRepo bookRepo;
 
    //All Get Methods
-   {
+
        public Book getBookById (Long id){
        return (Book) bookRepo.findById(id).orElse(null);
    }
@@ -33,7 +33,7 @@ public class BookService {
            throw new RuntimeException("Book not found by given id: " + id);
        }
    }
-   }
+   
     //Put Method
     public Book updateBook(Book book) {
         if (bookRepo.existsById(book.getId())) {
@@ -55,7 +55,7 @@ public class BookService {
         bookRepo.deleteById(id);
     }
 
-    // 5. Sell a Book
+    // 5. Sell a Book by id
     public void sellBook(Long id, int quantity) {
         Book book = bookRepo.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
         if (book.getTotalCount() >= quantity) {
