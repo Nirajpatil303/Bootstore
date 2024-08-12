@@ -1,10 +1,8 @@
 package com.Bookstore.Bookstore.Enitity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +23,10 @@ public class Book {
     @NotNull
     private String title;
     private String author;
-    private String category;
+    @ManyToOne
+    @JoinColumn( name = "Category_id")
+    @JsonIgnore
+    private Category category;
     @Min(value=0,message = "Price cannot be negative")
     private float price;
     @Min(value=0, message = "Count cannot be negative" )

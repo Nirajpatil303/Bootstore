@@ -1,5 +1,7 @@
 package com.Bookstore.Bookstore.Controller;
 
+import com.Bookstore.Bookstore.DTO.BookDTO;
+import com.Bookstore.Bookstore.DTO.SellDTO;
 import com.Bookstore.Bookstore.Enitity.Book;
 import com.Bookstore.Bookstore.Service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,13 @@ public class BookController {
     private BookService BookService;
 
     @GetMapping
-    public @ResponseBody List<Book> getallbooks(){
+    public @ResponseBody List<BookDTO> getallbooks(){
         return BookService.getAllBooks();
     }
     @GetMapping(path= "/{id}")
-    public @ResponseBody Book getbookbyid(@PathVariable long id){
-        return BookService.getBookById(id);
+    public @ResponseBody BookDTO getbookbyid(@PathVariable long id){
+        Book book = BookService.getBookById(id);
+        return BookService.convertToDTO(book);
     }
     @GetMapping(path= "/Count/{id}" )
     public int getNumberOfBooksAvailableById(@PathVariable long id){
@@ -35,6 +38,11 @@ public class BookController {
     @PutMapping(path= "/update")
     public @ResponseBody Book update(@RequestBody Book book){
         return BookService.updateBook(book);
+    }
+
+    @PostMapping(path="/sell")
+    public String sellbook(@RequestBody SellDTO sellDTO){
+        return BookService.sellBook(sellDTO.getId(),sellDTO.getQuantity());
     }
 
     @DeleteMapping(path="/{id}")

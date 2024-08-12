@@ -1,8 +1,8 @@
 package com.Bookstore.Bookstore.Enitity;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 
-public interface BookRepo extends CrudRepository<Book, Long> {
-    // You can define custom query methods here if needed
+public interface BookRepo extends JpaRepository<Book, Long> {
 }
