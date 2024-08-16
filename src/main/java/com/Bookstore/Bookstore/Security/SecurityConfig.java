@@ -14,31 +14,33 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public  SecurityConfig(CustomUserDetailsService customUserDetailsService){
+        this.customUserDetailsService=customUserDetailsService;
+    }
+
+
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests("/Category")
-                .antMatchers("/owner/**").hasRole("OWNER")
-                .antMatchers("/customer/**").hasRole("CUSTOMER")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .and()
-                .httpBasic();
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll() // Temporarily allowing all requests
+                )
+//                .antMatchers("/owner/**").hasRole("OWNER")
+//                .antMatchers("/customer/**").hasRole("CUSTOMER")
+//                .formLogin()
+//                .and()
+//                .httpBasic();
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("owner")
-                .password(passwordEncoder.encode("ownerpass"))
-                .roles("OWNER").build());
-        manager.createUser(User.withUsername("customer")
-                .password(passwordEncoder.encode("customerpass"))
-                .roles("CUSTOMER").build());
-        return manager;
+    public UserDetailsService userDetailsService() {
+        return (UserDetailsService) customUserDetailsService;
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
